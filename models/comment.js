@@ -7,16 +7,19 @@ const commentSchema = new mongoose.Schema({
         required: true,
         ref: 'Blog'
     }, 
-    content: {
-        type: String,
-        required: true,
-        trim: true
-    },
-	author: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'User'
-    }
+	comments:{
+		content: {
+			type: String,
+			required: true,
+			trim: true
+		},
+		author: {
+			type: mongoose.Schema.Types.ObjectId,
+			required: true,
+			ref: 'User'
+		}
+	}
+
 }, {
     timestamps: true
 })
@@ -30,6 +33,6 @@ commentSchema.pre('save', async function (next) {
 })
 
 
-const Comment = mongoose.model('Comment', commentSchema)
+const Comment = mongoose.model('comments', commentSchema)
 
 module.exports = Comment

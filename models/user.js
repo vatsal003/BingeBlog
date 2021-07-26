@@ -47,7 +47,18 @@ const userSchema = new mongoose.Schema({
             type: String,
             required: true
         }
-    }]
+    }],
+    liked_blogs: [{
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Blog'
+    }],
+	saved_blogs: [{
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Blog'
+	}]
+
 }, {
     timestamps: true
 })
@@ -107,6 +118,6 @@ userSchema.pre('remove', async function (next) {
     next()
 })
 
-const User = mongoose.model('User', userSchema)
+const User = mongoose.model('users', userSchema)
 
 module.exports = User

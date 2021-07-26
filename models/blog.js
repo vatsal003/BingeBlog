@@ -11,6 +11,9 @@ const blogSchema = new mongoose.Schema({
     thumbnail: {
         type: String
     },
+    thumbnail_id: {
+        type: String
+    },
     meta: {
         type: String,
         required: true
@@ -51,29 +54,33 @@ const blogSchema = new mongoose.Schema({
 		type: Number,
 		default: 0
 	}, 
+	clicks: {
+		type: Number,
+		default: 0
+	}, 
     content: {
         type: String,
         required: true,
         trim: true
-    },
+	},
 	author: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'User'
-    }
+	type: mongoose.Schema.Types.ObjectId,
+	required: true,
+	ref: 'User'
+	}
 }, {
     timestamps: true
 })
 
 
 
-// Delete comments when blog is removed
+// Delete comments when blog is removed And delete cloudinary resources
 blogSchema.pre('remove', async function (next) {
     const blog = this
     await Comment.deleteMany({ blog: blog._id })
     next()
 })
 
-const Blog = mongoose.model('Blog', blogSchema)
+const Blog = mongoose.model('blogs', blogSchema)
 
 module.exports = Blog
