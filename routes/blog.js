@@ -57,13 +57,13 @@ const upload = multer({ storage: storage, fileFilter: imageFilter});
 router.post('/blog', auth, upload.single('thumbnail'), async (req, res) => {
     try {
 		let thumbnail,thumbnail_id
-		if(req.file.qualif){
-				const result = await cloudinary.v2.uploader.upload(req.file.thumbnail.path, {folder:"blog_title"});
-				   thumbnail = result.secure_ul
+		if(req.file){
+					const result = await cloudinary.v2.uploader.upload(req.file.path, {folder:"blog_title"});
+				   thumbnail = result.secure_url
 				   thumbnail_id = result.public_id
 
 		}
-		console.log(req.body)
+		//console.log(req.body)
 		const title=req.body.title;
 		const meta = req.body.meta;
 		const time_to_read=req.body.time_to_read;
@@ -75,7 +75,6 @@ router.post('/blog', auth, upload.single('thumbnail'), async (req, res) => {
 			
 		}
 		const content = req.body.content
-		
 		const blog = new Blog({
 			title,
 			thumbnail,
@@ -115,7 +114,7 @@ router.get('/blogs/:id', async (req, res) => {
 //dp
 // // GET /tag?limit=20&skip=60
 // // GET /tag?sortBy=createdAt:desc
-router.get('/blogs/tags/:tag/:time', async (req, res) => {
+router.get('/blog/tags/:tag/:time', async (req, res) => {
     try {
 		console.log(req.params.time)
 		const options = {}
@@ -173,9 +172,8 @@ router.get('/blogs/tags/:tag', async (req, res) => {
 			options.skip = parseInt(req.query.skip)			
 		}
 		const tag = req.params.tag;
-		
+		console.log(tag)
         const blog = await Blog.find({ "tags" : tag }," -content -clicks",options).populate('author','name')
-
         res.status(200).send(blog)
     } 
 	catch (e) {
@@ -225,6 +223,20 @@ router.delete('/blogs/:id',auth,async (req,res) => {
 	
 })
 
+router.get('/blogs/title/:title', async (req, res) => {
+    try {
+
+		const title = req.params.title;
+		
+        const blog = await Blog.find({ "title" : { $regex: /title/i } }," -content -clicks",options).populate('author','name')
+        res.status(200).send(blog)
+    } 
+	catch (e) {
+		//console.log(e)
+        res.status(400).send(e)
+    }
+})
+//db.products.find( { sku:  } )
 
 
 module.exports = router

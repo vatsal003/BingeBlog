@@ -124,3 +124,5 @@ router.get('/blog-comments/:id', async (req, res) => {
     }
 })
 
+
+module.exports = router

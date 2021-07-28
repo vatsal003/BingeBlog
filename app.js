@@ -3,13 +3,14 @@ require('dotenv').config();
 const cors = require('cors')
 //const bodyParser = require('body-parser');
 require('./db/db')
-// const userRouter = require('./routers/user')
+const userRouter = require('./routes/user')
 const blogRouter = require('./routes/blog')
+const blogActivityRouter = require('./routes/blog_activity')
 const Blog = require('./models/blog')
 
 const app = express()
-var multer = require('multer');
-var upload = multer();
+// var multer = require('multer');
+// var upload = multer();
 
 //limit size
 app.use(express.json())
@@ -30,7 +31,9 @@ app.all('/*', function(req, res, next) {
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     next();
 });
+app.use(userRouter)
 app.use(blogRouter)
+app.use(blogActivityRouter)
 //app.use(express.static(path.join(__dirname, 'public')));
 //app.use(session({ secret: 'SimpleBlog', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
 
